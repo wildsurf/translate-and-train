@@ -2,36 +2,53 @@
  * Angular
  */
 import {Component} from '@angular/core';
-import {Http, Response} from '@angular/http';
+import {Http} from '@angular/http';
 import { TranslationService } from '../services/TranslationService';
 
 @Component({
   selector: 'translation-lookup',
   providers: [TranslationService],
   template: `
-  <h3>Which phrase would you like to learn today?</h3>
-  <form class="ui form" [class.loading]="loading">
+  <h2 class="ui red image header">Which phrase would you like to learn today?</h2>
+  <form class="ui large form" [class.loading]="loading">
     <div class="field">
-      <label>Choose a phrase</label>
-      <input type="text" id="translationSource" #translationSource placeholder="Nice day today">
+      <div class="ui raised segment left aligned">
+        <label class="ui red ribbon label">Phrase in English</label>
+        <input type="text"
+                id="translationSource"
+                #translationSource
+                placeholder="Nice day today">
+      </div>
+      <div class="ui raised segment left aligned">
+      <label class="ui red ribbon label">Phrase in Spanish</label>
+      <input type="text"
+              id="translationResult"
+              [(ngModel)]="translationResult">
+      </div>
     </div>
-    <button class="ui button" (click)="loadTranslation(translationSource.value)" type="button">Submit</button>
+    <button class="ui red button"
+        (click)="loadTranslation(translationSource.value)"
+        type="button">Submit</button>
   </form>
-  <pre>{{data | json}}</pre>
 `
 })
 export class TranslationLookup {
-  data: Object;
+  translationSource: string;
+  translationResult: string;
   loading: boolean;
 
-  constructor(public http: Http, private translationService: TranslationService) {
+  constructor(public http: Http,
+              private translationService: TranslationService) {
   }
 
-  loadTranslation(translationSource:string):void {
+  loadTranslation(translationSource: string): void {
+    this.loading = true;
+
     this.translationService.getTranslation(translationSource)
-    .subscribe(s => {
-      console.log(s);
-    });
+      .map((results: string[]) => results.join(', '))
+      .subscribe((result: string) => {
+        this.translationResult = result;
+        this.loading = false;
+      });
   }
 }
-

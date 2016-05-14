@@ -23,9 +23,9 @@ require('css/styles.scss');
     TranslationLookup
   ],
   template: `
-  <div class="container">
+    <div class="column">
     <translation-lookup></translation-lookup>
-  </div>
+    </div>
   `
 })
 class HttpApp {
