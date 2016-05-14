@@ -85,7 +85,7 @@ function makeConfig(options) {
       }),
       new ReloadPlugin( isDevServer ? 'localhost' : ''),
       new WebpackNotifierPlugin({
-        title: "ng-book",
+        title: "ANGULAR ATTACK!",
         // contentImage: path.join(appDir, 'images/notifier.png')
       }),
     ],
