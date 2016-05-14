@@ -1,6 +1,7 @@
 import { Injectable }     from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable }     from 'rxjs/Observable';
+import { TranslationPair }     from '../components/TranslationLookupComponent';
 
 @Injectable()
 export class TranslationService {
@@ -22,6 +23,15 @@ export class TranslationService {
     return this.http.request(urlString)
       .map(this.extractData)
       .catch(this.handleError);
+  }
+
+  saveTranslationPair(translationPair: TranslationPair): Observable<Response> {
+
+    return this.http.post(
+      'http://jsonplaceholder.typicode.com/posts',
+      JSON.stringify(translationPair)
+    );
+
   }
 
   private extractData(res: Response): string[] {
