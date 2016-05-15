@@ -17,10 +17,31 @@ export class TranslationPair {
 }
 
 @Component({
+  selector: 'google-that',
+  inputs: ['searchterm', 'result'],
+  template: `
+    <a [class.hidden]="isNoSearchTerm()" class="ui icon basic labeled right floated button"
+       href="http://www.google.com/search?q={{searchterm}}"
+       target="_blank"><i class="google icon"></i> That doesn't sound right. Google it!</a>
+    <div class="ui hidden divider"></div>
+  `
+})
+export class GoogleThat {
+  searchterm: string;
+  result: string;
+
+  public isNoSearchTerm(): boolean {
+    return !this.searchterm || !this.result;
+  }
+}
+
+
+@Component({
   selector: 'translation-lookup',
   providers: [TranslationService],
+  directives: [GoogleThat],
   template: `
-  <h2 class="ui red image header">Which phrase would you like to learn today?</h2>
+  <h2 class="ui red image header">Which phrase would you like to learn?</h2>
   <form class="ui large form">
   <div class="ui teal content message" [class.hidden]="!success">
     <i class="close icon" (click)="dismiss()"></i>
@@ -31,32 +52,27 @@ export class TranslationPair {
   </div>
     <div class="field">
       <div class="ui raised segment left aligned">
-        <label class="ui teal ribbon label"><i class="gb flag"></i> Phrase in English</label>
+        <label class="ui teal ribbon label"><i class="es flag"></i> Phrase in Spanish</label>
         <input type="text"
                 id="translationSource"
                 [ngFormControl]="translationSource"
                 autofocus
+                required
                 placeholder="Have a nice day">
       </div>
-      <div class="ui raised segment left aligned" [class.loading]="loading">
-      <label class="ui teal ribbon label"><i class="es flag"></i> Phrase in Spanish</label>
-      <input type="text"
+      <div class="ui raised segment left aligned">
+      <label class="ui teal ribbon label"><i class="gb flag"></i> Phrase in English</label>
+      <input [class.loading]="loading" type="text"
               id="translationResult"
               placeholder=""
               [(ngModel)]="translationResult">
+      <google-that [searchterm]="translationSource.value"
+        [result]="translationResult"></google-that>
       </div>
     </div>
     <button class="ui red button" [class.loading]="posting"
         type="button" (click)="submitForm()">Save phrase and translation</button>
   </form>
-  <div style="background:white;padding:10px 0">
-    <ul *ngFor="let translation of translationService.translations | async">
-      <li class="text">
-      {{translation.phrase}} -
-        {{translation.translation}}
-      </li>
-    </ul>
-  </div>
 `
 })
 export class TranslationLookup {
@@ -70,11 +86,17 @@ export class TranslationLookup {
               private translationService: TranslationService) {
       this.translationSource.valueChanges
              .debounceTime(400)
+             .distinctUntilChanged()
              .subscribe((term: string) => this.loadTranslation(term));
   }
 
   loadTranslation(translationSource: string): void {
+    if (!this.translationSource.valid) {
+      return;
+    }
+
     this.loading = true;
+    this.success = false;
 
     this.translationService.getTranslation(translationSource)
       .map((results: string[]) => results.join(', '))
@@ -91,12 +113,12 @@ export class TranslationLookup {
      this.translationService.saveTranslationPair(new TranslationPair(
        this.translationSource.value,
        this.translationResult
-     ))
-     .catch((error: string) => console.log(error))
-     .then(() => {
-       this.success = true;
-       this.posting = false;
-     });
+     ));
+
+     this.posting = false;
+     this.success = true;
+     this.translationResult = '';
+     this.translationSource.updateValue('');
   }
 
   dismiss(): void {

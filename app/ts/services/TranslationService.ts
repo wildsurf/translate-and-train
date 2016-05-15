@@ -21,17 +21,31 @@ export class TranslationService {
 
   getTranslation(translationSource: string): Observable<string[]> {
     let urlString: string =
-        `${this.translateUrl}?key=${this.apiKey}&text=${translationSource}&lang=en-es`;
+        `${this.translateUrl}?key=${this.apiKey}&text=${translationSource}&lang=es-en`;
 
     return this.http.request(urlString)
       .map(this.extractData)
       .catch(this.handleError);
   }
 
-  saveTranslationPair(translationPair: TranslationPair):
-    FirebaseWithPromise<void> {
+  saveTranslationPair(translationPair: TranslationPair): void {
 
-    return this.translations.push(translationPair);
+    let translationRef: any = this.translations._ref.ref();
+    let existingTranslation: any;
+
+    translationRef.once('value', (snapshot: any) => {
+        snapshot.forEach((child: any) => {
+            if (child.val().phrase === translationPair.phrase) {
+                existingTranslation = child;
+            }
+        });
+
+        if (!existingTranslation) {
+          this.translations.push(translationPair);
+        } else {
+          translationRef.child(existingTranslation.key()).set(translationPair);
+        }
+    });
   }
 
   private extractData(res: Response): string[] {
