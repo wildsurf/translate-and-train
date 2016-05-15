@@ -2,18 +2,21 @@ import { Injectable }     from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable }     from 'rxjs/Observable';
 import { TranslationPair }     from '../components/TranslationLookupComponent';
+import { AngularFire, FirebaseListObservable } from 'angularfire2';
 
 @Injectable()
 export class TranslationService {
 
+  public translations: FirebaseListObservable<TranslationPair[]>;
   private translateUrl: string;
   private apiKey: string;
 
-  constructor (private http: Http) {
+  constructor (private http: Http, private firebase: AngularFire) {
       this.translateUrl =
           'https://translate.yandex.net/api/v1.5/tr.json/translate';
       this.apiKey =
           'trnsl.1.1.20160424T175748Z.b14b726c783491a9.a32ac80420e3535516377dd996efc559e691639f';
+      this.translations = this.firebase.list('/translations');
   }
 
   getTranslation(translationSource: string): Observable<string[]> {
@@ -25,13 +28,10 @@ export class TranslationService {
       .catch(this.handleError);
   }
 
-  saveTranslationPair(translationPair: TranslationPair): Observable<Response> {
+  saveTranslationPair(translationPair: TranslationPair):
+    FirebaseWithPromise<void> {
 
-    return this.http.post(
-      'http://jsonplaceholder.typicode.com/posts',
-      JSON.stringify(translationPair)
-    );
-
+    return this.translations.push(translationPair);
   }
 
   private extractData(res: Response): string[] {

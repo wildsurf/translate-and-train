@@ -49,10 +49,18 @@ export class TranslationPair {
     <button class="ui red button" [class.loading]="posting"
         type="button" (click)="submitForm()">Save phrase and translation</button>
   </form>
+  <div style="background:white;padding:10px 0">
+    <ul *ngFor="let translation of translationService.translations | async">
+      <li class="text">
+      {{translation.phrase}} -
+        {{translation.translation}}
+      </li>
+    </ul>
+  </div>
 `
 })
 export class TranslationLookup {
-  translationSource = new Control();
+  translationSource: Control = new Control();
   translationResult: string;
   success: boolean;
   loading: boolean;
@@ -62,21 +70,21 @@ export class TranslationLookup {
               private translationService: TranslationService) {
       this.translationSource.valueChanges
              .debounceTime(400)
-             .subscribe(term => this.loadTranslation(term));
+             .subscribe((term: string) => this.loadTranslation(term));
   }
 
-  private loadTranslation(translationSource: string): void {
+  loadTranslation(translationSource: string): void {
     this.loading = true;
 
     this.translationService.getTranslation(translationSource)
       .map((results: string[]) => results.join(', '))
-      .subscribe(term => {
+      .subscribe((term: string) => {
         this.translationResult = term;
         this.loading = false;
       });
   }
 
-  private submitForm() {
+  submitForm(): void {
      this.success = false;
      this.posting = true;
 
@@ -84,15 +92,14 @@ export class TranslationLookup {
        this.translationSource.value,
        this.translationResult
      ))
-     .subscribe(() => {
+     .catch((error: string) => console.log(error))
+     .then(() => {
        this.success = true;
        this.posting = false;
-       this.translationResult = '';
-       this.translationSource.updateValue('');
      });
   }
 
-  private dismiss() {
+  dismiss(): void {
     this.success = false;
   }
 }

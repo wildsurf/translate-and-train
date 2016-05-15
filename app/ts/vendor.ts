@@ -16,3 +16,8 @@ import '@angular/http';
 // RxJS
 import 'rxjs';
 import 'ts-helpers';
+
+// Angular Firebase
+import 'angularfire2/angularfire2';
+import 'angularfire2/tokens';
+import 'firebase/lib/firebase-web';

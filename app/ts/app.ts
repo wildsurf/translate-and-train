@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { HTTP_PROVIDERS } from '@angular/http';
+import { FIREBASE_PROVIDERS, defaultFirebase } from 'angularfire2';
 
 /*
  * Components
@@ -32,5 +33,7 @@ class HttpApp {
 }
 
 bootstrap(HttpApp, [
-  HTTP_PROVIDERS
+  HTTP_PROVIDERS,
+  FIREBASE_PROVIDERS,
+  defaultFirebase('https://glowing-fire-5037.firebaseio.com/')
 ]);
