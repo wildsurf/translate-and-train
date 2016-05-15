@@ -22,7 +22,7 @@ export class TranslationPair {
   template: `
     <a [class.hidden]="isNoSearchTerm()" class="ui icon basic labeled right floated button"
        href="http://www.google.com/search?q={{searchterm}}"
-       target="_blank"><i class="google icon"></i> That doesn't sound right. Google it!</a>
+       target="_blank"><i class="google icon"></i> That doesn't sound right? Google it!</a>
     <div class="ui hidden divider"></div>
   `
 })
@@ -43,7 +43,7 @@ export class GoogleThat {
   template: `
   <h2 class="ui red image header">Which phrase would you like to learn?</h2>
   <form class="ui large form">
-  <div class="ui teal content message" [class.hidden]="!success">
+  <div class="ui success content message" [class.hidden]="!success">
     <i class="close icon" (click)="dismiss()"></i>
     <div class="header">
       Success!
@@ -52,7 +52,7 @@ export class GoogleThat {
   </div>
     <div class="field">
       <div class="ui raised segment left aligned">
-        <label class="ui teal ribbon label"><i class="es flag"></i> Phrase in Spanish</label>
+        <label class="ui black ribbon label"><i class="es flag"></i> Phrase in Spanish</label>
         <input type="text"
                 id="translationSource"
                 [ngFormControl]="translationSource"
@@ -61,7 +61,7 @@ export class GoogleThat {
                 placeholder="Have a nice day">
       </div>
       <div class="ui raised segment left aligned">
-      <label class="ui teal ribbon label"><i class="gb flag"></i> Phrase in English</label>
+      <label class="ui black ribbon label"><i class="gb flag"></i> Phrase in English</label>
       <input [class.loading]="loading" type="text"
               id="translationResult"
               placeholder=""
@@ -73,6 +73,9 @@ export class GoogleThat {
     <button class="ui red button" [class.loading]="posting"
         type="button" (click)="submitForm()">Save phrase and translation</button>
   </form>
+  <div class="ui middle aligned center aligned grid">
+    <a class="column" href="http://translate.yandex.com/" target="_blank">Powered by Yandex.Translate</a>
+  </div>
 `
 })
 export class TranslationLookup {
