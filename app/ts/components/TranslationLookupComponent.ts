@@ -41,7 +41,7 @@ export class GoogleThat {
   providers: [TranslationService],
   directives: [GoogleThat],
   template: `
-  <h2 class="ui red image header">Which phrase would you like to learn?</h2>
+  <h2 class="ui red image header">Which new phrase would you like to learn?</h2>
   <form class="ui large form">
   <div class="ui success content message" [class.hidden]="!success">
     <i class="close icon" (click)="dismiss()"></i>

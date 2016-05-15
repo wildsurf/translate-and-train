@@ -13,7 +13,6 @@ import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 import {
   ROUTER_DIRECTIVES,
   ROUTER_PROVIDERS,
-
   Router,
   RouteConfig
 } from '@angular/router-deprecated';
