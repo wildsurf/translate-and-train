@@ -3,6 +3,7 @@ import { Http, Response } from '@angular/http';
 import { Observable }     from 'rxjs/Observable';
 import { TranslationPair }     from '../components/TranslationLookupComponent';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
+import { AuthService } from './AuthService';
 
 @Injectable()
 export class TranslationService {
@@ -11,7 +12,7 @@ export class TranslationService {
   private translateUrl: string;
   private apiKey: string;
 
-  constructor (private http: Http, private firebase: AngularFire) {
+  constructor (private http: Http, private firebase: AngularFire, public authService: AuthService) {
       this.translateUrl =
           'https://translate.yandex.net/api/v1.5/tr.json/translate';
       this.apiKey =
@@ -32,6 +33,7 @@ export class TranslationService {
 
     let translationRef: any = this.translations._ref.ref();
     let existingTranslation: any;
+    let currentAuthor: string = this.authService.session.uid;
 
     translationRef.once('value', (snapshot: any) => {
         snapshot.forEach((child: any) => {
@@ -41,9 +43,17 @@ export class TranslationService {
         });
 
         if (!existingTranslation) {
-          this.translations.push(translationPair);
+          this.translations.push({
+              phrase: translationPair.phrase,
+              translation: translationPair.translation,
+              author: currentAuthor
+          });
         } else {
-          translationRef.child(existingTranslation.key()).set(translationPair);
+          translationRef.child(existingTranslation.key()).set({
+              phrase: translationPair.phrase,
+              translation: translationPair.translation,
+              author: currentAuthor
+          });
         }
     });
   }

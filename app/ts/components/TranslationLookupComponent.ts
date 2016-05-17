@@ -58,7 +58,7 @@ export class GoogleThat {
                 [ngFormControl]="translationSource"
                 autofocus
                 required
-                placeholder="Have a nice day">
+                placeholder="Hasta la vista">
       </div>
       <div class="ui raised segment left aligned">
       <label class="ui black ribbon label"><i class="gb flag"></i> Phrase in English</label>

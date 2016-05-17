@@ -6,7 +6,11 @@ import {
 } from '@angular/core';
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { HTTP_PROVIDERS } from '@angular/http';
-import { FIREBASE_PROVIDERS, defaultFirebase } from 'angularfire2';
+import { FIREBASE_PROVIDERS, defaultFirebase, firebaseAuthConfig,
+  AuthProviders,
+  AuthMethods } from 'angularfire2';
+
+import {AUTH_PROVIDERS} from 'services/AuthService';
 
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 
@@ -19,6 +23,7 @@ import {
 /*
  * Components
  */
+import { LoginComponent } from 'components/LoginComponent';
 import { TranslationLookup } from 'components/TranslationLookupComponent';
 import { PracticeComponent } from 'components/PracticeComponent';
 import { AboutComponent } from 'components/AboutComponent';
@@ -34,6 +39,7 @@ require('css/styles.scss');
     TranslationLookup,
     PracticeComponent,
     AboutComponent,
+    LoginComponent,
     ROUTER_DIRECTIVES
   ],
   template: `
@@ -43,7 +49,9 @@ require('css/styles.scss');
         <a class="item" [class.active]="isActive(['Practice'])" [routerLink]="['/Practice']">Practice</a>
         <a class="item" [class.active]="isActive(['Translations'])" [routerLink]="['/Translations']">Translations</a>
         <a class="item" [class.active]="isActive(['About'])" [routerLink]="['/About']">About</a>
+        <div class="item floated right"><login></login></div>
       </div>
+
 
   </header>
       <div class="container">
@@ -72,6 +80,11 @@ bootstrap(HttpApp, [
   ROUTER_PROVIDERS,
   HTTP_PROVIDERS,
   FIREBASE_PROVIDERS,
+  AUTH_PROVIDERS,
   defaultFirebase('https://glowing-fire-5037.firebaseio.com/'),
+  firebaseAuthConfig({
+    provider: AuthProviders.Twitter,
+    method: AuthMethods.Popup
+  }),
   provide(LocationStrategy, {useClass: HashLocationStrategy})
 ]);

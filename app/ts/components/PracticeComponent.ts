@@ -14,7 +14,7 @@ import {
   directives: [RouterLink],
   template: `
     <h2 class="ui red image header">Do you remember this phrase?</h2>
-    <div class="ui info content message" *ngIf="!currentTranslation && !loading">
+    <div class="ui info content message" [class.hidden]="currentTranslation || loading">
       <div class="header">
         No phrases found.
       </div>
@@ -109,6 +109,7 @@ export class PracticeComponent implements OnInit {
         });
         this.loading = false;
     });
+
   }
 
   resetInputs(): void {
