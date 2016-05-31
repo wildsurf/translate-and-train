@@ -16,12 +16,14 @@ webpackJsonp([0],{
 	var platform_browser_dynamic_1 = __webpack_require__(98);
 	var http_1 = __webpack_require__(281);
 	var angularfire2_1 = __webpack_require__(862);
+	var AuthService_1 = __webpack_require__(909);
 	var common_1 = __webpack_require__(182);
 	var router_deprecated_1 = __webpack_require__(875);
+	var LoginComponent_1 = __webpack_require__(910);
 	var TranslationLookupComponent_1 = __webpack_require__(853);
 	var PracticeComponent_1 = __webpack_require__(907);
 	var AboutComponent_1 = __webpack_require__(908);
-	__webpack_require__(563);
+	__webpack_require__(911);
 	var HttpApp = (function () {
 	    function HttpApp(router) {
 	        this.router = router;
@@ -36,9 +38,10 @@ webpackJsonp([0],{
 	                TranslationLookupComponent_1.TranslationLookup,
 	                PracticeComponent_1.PracticeComponent,
 	                AboutComponent_1.AboutComponent,
+	                LoginComponent_1.LoginComponent,
 	                router_deprecated_1.ROUTER_DIRECTIVES
 	            ],
-	            template: "\n  <header class=\"page-header\">\n\n      <div class=\"ui tabular menu\">\n        <a class=\"item\" [class.active]=\"isActive(['Practice'])\" [routerLink]=\"['/Practice']\">Practice</a>\n        <a class=\"item\" [class.active]=\"isActive(['Translations'])\" [routerLink]=\"['/Translations']\">Translations</a>\n        <a class=\"item\" [class.active]=\"isActive(['About'])\" [routerLink]=\"['/About']\">About</a>\n      </div>\n\n  </header>\n      <div class=\"container\">\n    <div class=\"column\">\n    <router-outlet></router-outlet>\n    </div>\n    </div>\n  "
+	            template: "\n  <header class=\"page-header\">\n\n      <div class=\"ui tabular menu\">\n        <a class=\"item\" [class.active]=\"isActive(['Practice'])\" [routerLink]=\"['/Practice']\">Practice</a>\n        <a class=\"item\" [class.active]=\"isActive(['Translations'])\" [routerLink]=\"['/Translations']\">Translations</a>\n        <a class=\"item\" [class.active]=\"isActive(['About'])\" [routerLink]=\"['/About']\">About</a>\n        <div class=\"item floated right\"><login></login></div>\n      </div>\n\n\n  </header>\n      <div class=\"container\">\n    <div class=\"column\">\n    <router-outlet></router-outlet>\n    </div>\n    </div>\n  "
 	        }),
 	        router_deprecated_1.RouteConfig([
 	            { path: '/', name: 'root', redirectTo: ['Practice'] },
@@ -54,44 +57,15 @@ webpackJsonp([0],{
 	    router_deprecated_1.ROUTER_PROVIDERS,
 	    http_1.HTTP_PROVIDERS,
 	    angularfire2_1.FIREBASE_PROVIDERS,
+	    AuthService_1.AUTH_PROVIDERS,
 	    angularfire2_1.defaultFirebase('https://glowing-fire-5037.firebaseio.com/'),
+	    angularfire2_1.firebaseAuthConfig({
+	        provider: angularfire2_1.AuthProviders.Twitter,
+	        method: angularfire2_1.AuthMethods.Popup
+	    }),
 	    core_1.provide(common_1.LocationStrategy, { useClass: common_1.HashLocationStrategy })
 	]);
 
-
-/***/ },
-
-/***/ 563:
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(564);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(572)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/extract-text-webpack-plugin/loader.js?{\"omit\":1,\"extract\":true,\"remove\":true}!style-loader!css-loader?sourceMap!./../../node_modules/sass-loader/index.js?outputStyle=expanded&root=/Users/veronikahillebrand/playground/angularattack2016-wildsurf/app&&includePaths[]/Users/veronikahillebrand/playground/angularattack2016-wildsurf/node_modules&&includePaths[]/Users/veronikahillebrand/playground/angularattack2016-wildsurf/app!./styles.scss", function() {
-				var newContent = require("!!./../../node_modules/extract-text-webpack-plugin/loader.js?{\"omit\":1,\"extract\":true,\"remove\":true}!style-loader!css-loader?sourceMap!./../../node_modules/sass-loader/index.js?outputStyle=expanded&root=/Users/veronikahillebrand/playground/angularattack2016-wildsurf/app&&includePaths[]/Users/veronikahillebrand/playground/angularattack2016-wildsurf/node_modules&&includePaths[]/Users/veronikahillebrand/playground/angularattack2016-wildsurf/app!./styles.scss");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-
-/***/ 564:
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
 
 /***/ },
 
@@ -396,7 +370,7 @@ webpackJsonp([0],{
 	            selector: 'translation-lookup',
 	            providers: [TranslationService_1.TranslationService],
 	            directives: [GoogleThat],
-	            template: "\n  <h2 class=\"ui red image header\">Which new phrase would you like to learn?</h2>\n  <form class=\"ui large form\">\n  <div class=\"ui success content message\" [class.hidden]=\"!success\">\n    <i class=\"close icon\" (click)=\"dismiss()\"></i>\n    <div class=\"header\">\n      Success!\n    </div>\n    <p>You have saved the phrase and translation.</p>\n  </div>\n    <div class=\"field\">\n      <div class=\"ui raised segment left aligned\">\n        <label class=\"ui black ribbon label\"><i class=\"es flag\"></i> Phrase in Spanish</label>\n        <input type=\"text\"\n                id=\"translationSource\"\n                [ngFormControl]=\"translationSource\"\n                autofocus\n                required\n                placeholder=\"Have a nice day\">\n      </div>\n      <div class=\"ui raised segment left aligned\">\n      <label class=\"ui black ribbon label\"><i class=\"gb flag\"></i> Phrase in English</label>\n      <input [class.loading]=\"loading\" type=\"text\"\n              id=\"translationResult\"\n              placeholder=\"\"\n              [(ngModel)]=\"translationResult\">\n      <google-that [searchterm]=\"translationSource.value\"\n        [result]=\"translationResult\"></google-that>\n      </div>\n    </div>\n    <button class=\"ui red button\" [class.loading]=\"posting\"\n        type=\"button\" (click)=\"submitForm()\">Save phrase and translation</button>\n  </form>\n  <div class=\"ui middle aligned center aligned grid\">\n    <a class=\"column\" href=\"http://translate.yandex.com/\" target=\"_blank\">Powered by Yandex.Translate</a>\n  </div>\n"
+	            template: "\n  <h2 class=\"ui red image header\">Which new phrase would you like to learn?</h2>\n  <form class=\"ui large form\">\n  <div class=\"ui success content message\" [class.hidden]=\"!success\">\n    <i class=\"close icon\" (click)=\"dismiss()\"></i>\n    <div class=\"header\">\n      Success!\n    </div>\n    <p>You have saved the phrase and translation.</p>\n  </div>\n    <div class=\"field\">\n      <div class=\"ui raised segment left aligned\">\n        <label class=\"ui black ribbon label\"><i class=\"es flag\"></i> Phrase in Spanish</label>\n        <input type=\"text\"\n                id=\"translationSource\"\n                [ngFormControl]=\"translationSource\"\n                autofocus\n                required\n                placeholder=\"Hasta la vista\">\n      </div>\n      <div class=\"ui raised segment left aligned\">\n      <label class=\"ui black ribbon label\"><i class=\"gb flag\"></i> Phrase in English</label>\n      <input [class.loading]=\"loading\" type=\"text\"\n              id=\"translationResult\"\n              placeholder=\"\"\n              [(ngModel)]=\"translationResult\">\n      <google-that [searchterm]=\"translationSource.value\"\n        [result]=\"translationResult\"></google-that>\n      </div>\n    </div>\n    <button class=\"ui red button\" [class.loading]=\"posting\"\n        type=\"button\" (click)=\"submitForm()\">Save phrase and translation</button>\n  </form>\n  <div class=\"ui middle aligned center aligned grid\">\n    <a class=\"column\" href=\"http://translate.yandex.com/\" target=\"_blank\">Powered by Yandex.Translate</a>\n  </div>\n"
 	        }), 
 	        __metadata('design:paramtypes', [http_1.Http, TranslationService_1.TranslationService])
 	    ], TranslationLookup);
@@ -415,10 +389,12 @@ webpackJsonp([0],{
 	var http_1 = __webpack_require__(281);
 	var Observable_1 = __webpack_require__(36);
 	var angularfire2_1 = __webpack_require__(862);
+	var AuthService_1 = __webpack_require__(909);
 	var TranslationService = (function () {
-	    function TranslationService(http, firebase) {
+	    function TranslationService(http, firebase, authService) {
 	        this.http = http;
 	        this.firebase = firebase;
+	        this.authService = authService;
 	        this.translateUrl =
 	            'https://translate.yandex.net/api/v1.5/tr.json/translate';
 	        this.apiKey =
@@ -435,6 +411,7 @@ webpackJsonp([0],{
 	        var _this = this;
 	        var translationRef = this.translations._ref.ref();
 	        var existingTranslation;
+	        var currentAuthor = this.authService.session.uid;
 	        translationRef.once('value', function (snapshot) {
 	            snapshot.forEach(function (child) {
 	                if (child.val().phrase === translationPair.phrase) {
@@ -442,10 +419,18 @@ webpackJsonp([0],{
 	                }
 	            });
 	            if (!existingTranslation) {
-	                _this.translations.push(translationPair);
+	                _this.translations.push({
+	                    phrase: translationPair.phrase,
+	                    translation: translationPair.translation,
+	                    author: currentAuthor
+	                });
 	            }
 	            else {
-	                translationRef.child(existingTranslation.key()).set(translationPair);
+	                translationRef.child(existingTranslation.key()).set({
+	                    phrase: translationPair.phrase,
+	                    translation: translationPair.translation,
+	                    author: currentAuthor
+	                });
 	            }
 	        });
 	    };
@@ -463,7 +448,7 @@ webpackJsonp([0],{
 	    };
 	    TranslationService = __decorate([
 	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [http_1.Http, angularfire2_1.AngularFire])
+	        __metadata('design:paramtypes', [http_1.Http, angularfire2_1.AngularFire, AuthService_1.AuthService])
 	    ], TranslationService);
 	    return TranslationService;
 	}());
@@ -5123,7 +5108,7 @@ webpackJsonp([0],{
 	        core_1.Component({
 	            providers: [TranslationService_1.TranslationService],
 	            directives: [router_deprecated_1.RouterLink],
-	            template: "\n    <h2 class=\"ui red image header\">Do you remember this phrase?</h2>\n    <div class=\"ui info content message\" *ngIf=\"!currentTranslation && !loading\">\n      <div class=\"header\">\n        No phrases found.\n      </div>\n      <p>There are no translations in your list.\n      Try to <a [routerLink]=\"['/Translations']\">add some.</a></p>\n    </div>\n    <form class=\"ui large form\" *ngIf=\"currentTranslation\" (submit)=\"submitForm()\">\n    <div class=\"ui success content message\" [class.visible]=\"success\">\n      <i class=\"close icon\" (click)=\"dismiss('success')\"></i>\n      <div class=\"header\">\n        Success!\n      </div>\n      <p>You have entered the correct translation!</p>\n    </div>\n    <div class=\"ui error content message\" *ngIf=\"currentTranslation\" [class.visible]=\"error\">\n      <i class=\"close icon\" (click)=\"dismiss('error')\"></i>\n      <div class=\"header\">\n        Not quite!\n      </div>\n      <p>The phrase is: <strong>{{currentTranslation.translation}}</strong></p>\n    </div>\n      <div class=\"field\" [class.loading]=\"loading\">\n        <div class=\"ui raised segment left aligned\">\n          <div class=\"ui info content message\">\n              <i class=\"es flag\"></i>\n              {{currentTranslation.phrase}}\n          </div>\n        </div>\n        <div class=\"ui raised segment left aligned\">\n        <label class=\"ui black ribbon label\"><i class=\"gb flag\"></i> Phrase in English</label>\n        <input type=\"text\"\n                id=\"translation\"\n                autofocus\n                [ngFormControl]=\"translation\">\n        </div>\n      </div>\n      <button *ngIf=\"!error && !success\"\n          id=\"check-button\"\n          class=\"ui red button\"\n          type=\"submit\">Check your translation</button>\n      <button *ngIf=\"error || success\"\n          id=\"next-button\"\n          class=\"ui teal button\"\n          type=\"button\" (click)=\"dismiss()\">Next translation</button>\n    </form>\n  "
+	            template: "\n    <h2 class=\"ui red image header\">Do you remember this phrase?</h2>\n    <div class=\"ui info content message\" [class.hidden]=\"currentTranslation || loading\">\n      <div class=\"header\">\n        No phrases found.\n      </div>\n      <p>There are no translations in your list.\n      Try to <a [routerLink]=\"['/Translations']\">add some.</a></p>\n    </div>\n    <form class=\"ui large form\" *ngIf=\"currentTranslation\" (submit)=\"submitForm()\">\n    <div class=\"ui success content message\" [class.visible]=\"success\">\n      <i class=\"close icon\" (click)=\"dismiss('success')\"></i>\n      <div class=\"header\">\n        Success!\n      </div>\n      <p>You have entered the correct translation!</p>\n    </div>\n    <div class=\"ui error content message\" *ngIf=\"currentTranslation\" [class.visible]=\"error\">\n      <i class=\"close icon\" (click)=\"dismiss('error')\"></i>\n      <div class=\"header\">\n        Not quite!\n      </div>\n      <p>The phrase is: <strong>{{currentTranslation.translation}}</strong></p>\n    </div>\n      <div class=\"field\" [class.loading]=\"loading\">\n        <div class=\"ui raised segment left aligned\">\n          <div class=\"ui info content message\">\n              <i class=\"es flag\"></i>\n              {{currentTranslation.phrase}}\n          </div>\n        </div>\n        <div class=\"ui raised segment left aligned\">\n        <label class=\"ui black ribbon label\"><i class=\"gb flag\"></i> Phrase in English</label>\n        <input type=\"text\"\n                id=\"translation\"\n                autofocus\n                [ngFormControl]=\"translation\">\n        </div>\n      </div>\n      <button *ngIf=\"!error && !success\"\n          id=\"check-button\"\n          class=\"ui red button\"\n          type=\"submit\">Check your translation</button>\n      <button *ngIf=\"error || success\"\n          id=\"next-button\"\n          class=\"ui teal button\"\n          type=\"button\" (click)=\"dismiss()\">Next translation</button>\n    </form>\n  "
 	        }), 
 	        __metadata('design:paramtypes', [TranslationService_1.TranslationService])
 	    ], PracticeComponent);
@@ -5152,6 +5137,117 @@ webpackJsonp([0],{
 	}());
 	exports.AboutComponent = AboutComponent;
 
+
+/***/ },
+
+/***/ 909:
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var core_1 = __webpack_require__(2);
+	var angularfire2_1 = __webpack_require__(862);
+	var AuthService = (function () {
+	    function AuthService(firebase, auth) {
+	        var _this = this;
+	        this.firebase = firebase;
+	        this.auth = auth;
+	        this.auth.subscribe(function (authState) { return _this.session = authState; });
+	    }
+	    AuthService.prototype.loginWithTwitter = function () {
+	        this.auth.login();
+	    };
+	    AuthService.prototype.logout = function () {
+	        this.auth.logout();
+	    };
+	    AuthService.prototype.getUser = function () {
+	        return this.session;
+	    };
+	    AuthService.prototype.isLoggedIn = function () {
+	        return !!this.session;
+	    };
+	    AuthService.prototype.overrideLogin = function () {
+	        this.auth.login({
+	            provider: angularfire2_1.AuthProviders.Anonymous,
+	            method: angularfire2_1.AuthMethods.Anonymous
+	        });
+	    };
+	    AuthService = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [angularfire2_1.AngularFire, angularfire2_1.FirebaseAuth])
+	    ], AuthService);
+	    return AuthService;
+	}());
+	exports.AuthService = AuthService;
+	exports.AUTH_PROVIDERS = [
+	    core_1.provide(AuthService, { useClass: AuthService })
+	];
+
+
+/***/ },
+
+/***/ 910:
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var core_1 = __webpack_require__(2);
+	var AuthService_1 = __webpack_require__(909);
+	var LoginComponent = (function () {
+	    function LoginComponent(authService) {
+	        this.authService = authService;
+	        this.message = '';
+	    }
+	    LoginComponent.prototype.login = function () {
+	        this.authService.loginWithTwitter();
+	    };
+	    LoginComponent.prototype.logout = function () {
+	        this.authService.logout();
+	        return false;
+	    };
+	    LoginComponent = __decorate([
+	        core_1.Component({
+	            selector: 'login',
+	            template: "\n  <button *ngIf=\"!authService.isLoggedIn()\"\n    (click)=\"login()\"\n    class=\"ui twitter tiny button\">\n    <i class=\"twitter icon\"></i>\n    Login with Twitter\n  </button>\n  <div class=\"well\" *ngIf=\"authService.isLoggedIn()\">\n    Logged in as <b>{{ authService.getUser().twitter.displayName}}</b>\n    <a href (click)=\"logout()\">Log out</a>\n  </div>\n  "
+	        }), 
+	        __metadata('design:paramtypes', [AuthService_1.AuthService])
+	    ], LoginComponent);
+	    return LoginComponent;
+	}());
+	exports.LoginComponent = LoginComponent;
+
+
+/***/ },
+
+/***/ 911:
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(912);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(572)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/extract-text-webpack-plugin/loader.js?{\"omit\":1,\"extract\":true,\"remove\":true}!style-loader!css-loader?sourceMap!./../../node_modules/sass-loader/index.js?outputStyle=expanded&root=/Users/veronikahillebrand/playground/translate-and-train/app&&includePaths[]/Users/veronikahillebrand/playground/translate-and-train/node_modules&&includePaths[]/Users/veronikahillebrand/playground/translate-and-train/app!./styles.scss", function() {
+				var newContent = require("!!./../../node_modules/extract-text-webpack-plugin/loader.js?{\"omit\":1,\"extract\":true,\"remove\":true}!style-loader!css-loader?sourceMap!./../../node_modules/sass-loader/index.js?outputStyle=expanded&root=/Users/veronikahillebrand/playground/translate-and-train/app&&includePaths[]/Users/veronikahillebrand/playground/translate-and-train/node_modules&&includePaths[]/Users/veronikahillebrand/playground/translate-and-train/app!./styles.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+
+/***/ 912:
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
 
 /***/ }
 

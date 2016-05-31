@@ -1,13 +1,18 @@
 import {Injectable, provide} from '@angular/core';
+import {Subject, BehaviorSubject} from 'rxjs';
 import { AngularFire, FirebaseAuth, FirebaseAuthState,
   AuthProviders, AuthMethods } from 'angularfire2';
 
 @Injectable()
 export class AuthService {
   public session: FirebaseAuthState;
+  public author: Subject<string> = new BehaviorSubject<string>(null);
 
   constructor(private firebase: AngularFire, private auth: FirebaseAuth) {
-    this.auth.subscribe((authState: FirebaseAuthState) => this.session = authState);
+      this.auth.subscribe((authState: FirebaseAuthState) => {
+          this.session = authState;
+          this.author.next((authState) ? authState.uid : null);
+      });
   }
 
   loginWithTwitter(): void {

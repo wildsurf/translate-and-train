@@ -1,6 +1,6 @@
 import { Injectable }     from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Observable }     from 'rxjs/Observable';
+import { Observable }     from 'rxjs';
 import { TranslationPair }     from '../components/TranslationLookupComponent';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { AuthService } from './AuthService';
@@ -9,6 +9,7 @@ import { AuthService } from './AuthService';
 export class TranslationService {
 
   public translations: FirebaseListObservable<TranslationPair[]>;
+  private currentAuthor: string;
   private translateUrl: string;
   private apiKey: string;
 
@@ -17,7 +18,10 @@ export class TranslationService {
           'https://translate.yandex.net/api/v1.5/tr.json/translate';
       this.apiKey =
           'trnsl.1.1.20160424T175748Z.b14b726c783491a9.a32ac80420e3535516377dd996efc559e691639f';
-      this.translations = this.firebase.list('/translations');
+      this.authService.author.subscribe((newAuthor: string) => {
+          this.currentAuthor = newAuthor;
+          this.translations = this.firebase.list('/phrases/' + newAuthor);
+      });
   }
 
   getTranslation(translationSource: string): Observable<string[]> {
@@ -33,7 +37,6 @@ export class TranslationService {
 
     let translationRef: any = this.translations._ref.ref();
     let existingTranslation: any;
-    let currentAuthor: string = this.authService.session.uid;
 
     translationRef.once('value', (snapshot: any) => {
         snapshot.forEach((child: any) => {
@@ -46,13 +49,13 @@ export class TranslationService {
           this.translations.push({
               phrase: translationPair.phrase,
               translation: translationPair.translation,
-              author: currentAuthor
+              author: this.currentAuthor
           });
         } else {
           translationRef.child(existingTranslation.key()).set({
               phrase: translationPair.phrase,
               translation: translationPair.translation,
-              author: currentAuthor
+              author: this.currentAuthor
           });
         }
     });

@@ -5,14 +5,17 @@ import { Component } from '@angular/core';
 import { Control } from '@angular/common';
 import { Http } from '@angular/http';
 import { TranslationService } from '../services/TranslationService';
+import { AuthService } from '../services/AuthService';
 
 export class TranslationPair {
   phrase: string;
   translation: string;
+  author: string;
 
-  constructor(newPhrase: string, newTranslation: string) {
+  constructor(newPhrase: string, newTranslation: string, newAuthor: string) {
     this.phrase = newPhrase;
     this.translation = newTranslation;
+    this.author = newAuthor;
   }
 }
 
@@ -86,7 +89,8 @@ export class TranslationLookup {
   posting: boolean;
 
   constructor(public http: Http,
-              private translationService: TranslationService) {
+              private translationService: TranslationService,
+              public authService: AuthService) {
       this.translationSource.valueChanges
              .debounceTime(400)
              .distinctUntilChanged()
@@ -115,7 +119,8 @@ export class TranslationLookup {
 
      this.translationService.saveTranslationPair(new TranslationPair(
        this.translationSource.value,
-       this.translationResult
+       this.translationResult,
+       null
      ));
 
      this.posting = false;
